@@ -1,0 +1,788 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In â€” ClimateBuildAI Enterprise Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F2027 100%);
+      color: #F8FAFC;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      font-family: var(--font-sans);
+    }
+    .login-container {
+      width: 100%;
+      max-width: 1040px;
+      background: #FFFFFF;
+      color: var(--text-primary);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .login-header {
+      background: #1E293B;
+      color: #FFFFFF;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--accent);
+    }
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .login-brand-icon {
+      font-size: 28px;
+      background: rgba(67, 138, 132, 0.25);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: 1px solid rgba(67, 138, 132, 0.5);
+    }
+    .login-brand h1 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      margin: 0;
+      color: #FFFFFF;
+    }
+    .login-brand p {
+      font-size: 12px;
+      color: #94A3B8;
+      margin: 2px 0 0 0;
+    }
+    .login-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(46, 125, 50, 0.2);
+      color: #4ADE80;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    .login-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      min-height: 580px;
+    }
+    .login-form-side {
+      padding: 36px 32px;
+      background: #FFFFFF;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .login-form-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .login-form-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper input {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-family: var(--font-sans);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: all 0.2s ease;
+      background: var(--bg-app);
+      color: var(--text-primary);
+    }
+    .input-wrapper input:focus {
+      border-color: var(--accent);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(67, 138, 132, 0.15);
+    }
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-muted);
+      padding: 4px;
+    }
+    .login-submit-btn {
+      width: 100%;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s ease, transform 0.1s ease;
+      margin-top: 10px;
+    }
+    .login-submit-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .login-error-banner {
+      background: var(--risk-critical-bg);
+      border: 1px solid var(--risk-critical-border);
+      color: var(--risk-critical);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      margin-bottom: 18px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .login-quick-side {
+      background: var(--bg-subtle);
+      padding: 30px;
+      overflow-y: auto;
+      max-height: 660px;
+    }
+    .quick-side-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .quick-side-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .quick-filter-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .quick-filter-btn {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .quick-filter-btn.active, .quick-filter-btn:hover {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+    .persona-quick-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .persona-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .persona-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .persona-card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .persona-avatar {
+      font-size: 22px;
+      background: var(--bg-app);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .persona-info {
+      flex: 1;
+      overflow: hidden;
+    }
+    .persona-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .persona-username {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .persona-role-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .persona-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 8px;
+      align-self: flex-start;
+    }
+    .tag-owner {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+    }
+    .tag-contractor {
+      background: #DBEAFE;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+    .tag-team {
+      background: #E0F2FE;
+      color: #0369A1;
+      border: 1px solid #BAE6FD;
+    }
+    .tag-viewer {
+      background: #F1F5F9;
+      color: #475569;
+      border: 1px solid #E2E8F0;
+    }
+    .persona-jurisdiction {
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: var(--bg-app);
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .persona-login-action {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      margin-top: auto;
+    }
+    .persona-card:hover .persona-login-action {
+      color: var(--primary);
+    }
+    /* Selected state for persona cards */
+    .persona-card.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      box-shadow: 0 0 0 2px rgba(37,99,235,0.18), 0 4px 16px rgba(37,99,235,0.10);
+      transform: translateY(-2px);
+    }
+    .persona-card.selected .persona-login-action {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .demo-credentials-note {
+      margin-top: 20px;
+      background: #F8FAFC;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .demo-credentials-note code {
+      background: #E2E8F0;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    @media (max-width: 860px) {
+      .login-grid {
+        grid-template-columns: 1fr;
+      }
+      .login-form-side {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .persona-quick-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <!-- Header -->
+    <div class="login-header">
+      <div class="login-brand">
+        <div class="login-brand-icon">ðŸ—ï¸</div>
+        <div>
+          <h1>ClimateBuild AI</h1>
+          <p>Enterprise Climate Risk &amp; Infrastructure Intelligence Platform</p>
+        </div>
+      </div>
+      <div class="login-status-badge">
+        <span>â—</span>
+        <span>Risk Engine &amp; SQLite Online</span>
+      </div>
+    </div>
+
+    <!-- Login Grid -->
+    <div class="login-grid">
+      <!-- Left: Form -->
+      <div class="login-form-side">
+        <div class="login-form-title">Operator Authentication</div>
+        <div class="login-form-sub">Sign in with enterprise credentials to access active project telemetry.</div>
+
+        <div id="loginErrorBanner" class="login-error-banner">
+          <span>âš ï¸</span>
+          <span id="loginErrorText">Invalid username or password.</span>
+        </div>
+
+        <form id="loginForm" onsubmit="handleFormLogin(event)">
+          <div class="form-group">
+            <label class="form-label" for="loginUsername">Username / ID</label>
+            <div class="input-wrapper">
+              <input type="text" id="loginUsername" placeholder="e.g. rahul.engineer" required autofocus autocomplete="username">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="loginPassword" value="climate123" placeholder="Enter password" required autocomplete="current-password">
+              <button type="button" class="toggle-pwd-btn" id="togglePwdBtn" onclick="togglePasswordVisibility()">ðŸ‘ï¸</button>
+            </div>
+          </div>
+
+          <button type="submit" class="login-submit-btn" id="loginSubmitBtn">
+            <span>Sign In to Console</span>
+            <span>âž”</span>
+          </button>
+        </form>
+
+        <!-- Selected Account Notice (shown after clicking a persona card) -->
+        <div id="selectedAccountNotice" style="display:none; align-items:center; gap:8px; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:6px; padding:9px 14px; margin-top:12px; font-size:13px;"></div>
+
+        <div class="demo-credentials-note">
+          <strong>ðŸ’¡ Demo Notice:</strong><br>
+          Default password for all 8 accounts is <code>climate123</code>. Click any role card on the right to select an account, then tap <strong>Sign In to Console âž”</strong>.
+        </div>
+      </div>
+
+      <!-- Right: Quick Personas -->
+      <div class="login-quick-side">
+        <div class="quick-side-header">
+          <div class="quick-side-title">âš¡ 1-Click Persona Quick-Login (8 Seeded Accounts)</div>
+        </div>
+
+        <div class="quick-filter-tabs">
+          <button class="quick-filter-btn active" onclick="filterPersonas('all', this)">All (8)</button>
+          <button class="quick-filter-btn" onclick="filterPersonas('Owner', this)">Owners (2)</button>
+          <button class="quick-filter-btn" onclick="filterPersonas('Contractor', this)">Contractors (2)</button>
+          <button class="quick-filter-btn" onclick="filterPersonas('Team/Staff', this)">Operations Team (3)</button>
+          <button class="quick-filter-btn" onclick="filterPersonas('Viewer', this)">Auditor (1)</button>
+        </div>
+
+        <div class="persona-quick-grid" id="personaQuickGrid">
+          <!-- Account 1: rahul.engineer -->
+          <div class="persona-card" data-type="Team/Staff" onclick="quickLogin('rahul.engineer')">
+            <div class="persona-card-top">
+              <div class="persona-avatar">ðŸ‘·</div>
+              <div class="persona-info">
+                <div class="persona-name">Rahul Sharma</div>
+                <div class="persona-username">rahul.engineer</div>
+              </div>
+            </div>
+            <span class="persona-tag tag-team">Team / Staff</span>
+            <div class="persona-role-title">Site Engineer</div>
+            <div class="persona-jurisdiction">ðŸ“ All Construction Sites (Operations)</div>
+            <div class="persona-login-action">Tap to Select</div>
+          </div>
+
+          <!-- Account 2: pooja.safety -->
+          <div class="persona-card" data-type="Team/Staff" onclick="quickLogin('pooja.safety')">
+            <div class="persona-card-top">
+              <div class="persona-avatar">ðŸ¦º</div>
+              <div class="persona-info">
+                <div class="persona-name">Pooja Deshmukh</div>
+                <div class="persona-username">pooja.safety</div>
+              </div>
+            </div>
+            <span class="persona-tag tag-team">Team / Staff</span>
+            <div class="persona-role-title">Safety Officer</div>
+            <div class="persona-jurisdiction">ðŸ“ All Sites (Heat &amp; Storm Compliance)</div>
+            <div class="persona-login-action">Tap to Select</div>
+          </div>
+
+          <!-- Account 3: vikram.pm -->
+          <div class="persona-card" data-type="Team/Staff" onclick="quickLogin('vikram.pm')">
+            <div class="persona-card-top">
+              <div class="persona-avatar">ðŸ“Š</div>
+              <div class="persona-info">
+                <div class="persona-name">Vikram Patil</div>
+                <div class="persona-username">vikram.pm</div>
+              </div>
+            </div>
+            <span class="persona-tag tag-team">Team / Staff</span>
+            <div class="persona-role-title">Project Director</div>
+            <div class="persona-jurisdiction">ðŸ“ Executive Oversight &amp; Audit Reports</div>
+            <div class="persona-login-action">Tap to Select</div>
+          </div>
+
+          <!-- Account 4: shiva.admin -->
+          <div class="persona-card" data-type="Contractor" onclick="quickLogin('shiva.admin')">
+            <div class="persona-card-top">
+              <div class="persona-avatar">ðŸ¢</div>
+              <div class="persona-info">
+                <div class="persona-name">Shiva Contractor</div>
+                <div class="persona-username">shiva.admin</div>
+              </div>
+            </div>
+            <span class="persona-tag tag-contractor">Contractor</span>
+            <div class="persona-role-title">Lead Master Contractor</div>
+            <div class="persona-jurisdiction">ðŸ—ï¸ Dual-Confirm: Pune Metro &amp; Nashik</div>
+            <div class="persona-login-action">Tap to Select</div>
+          </div>
+
+          <!-- Account 5: amit.contractor -->
+          <div class="persona-card" data-type="Contractor" onclick="quickLogin('amit.contractor')">
+            <div class="persona-card-top">
+              <div class="persona-avatar">ðŸš›</div>
+              <div class="persona-info">
+                <div class="persona-name">Amit Verma</div>
+                <div class="persona-username">amit.contractor</div>
+              </div>
+            </div>
+            <span class="persona-tag tag-contractor">Contractor</span>
+            <div class="persona-role-title">Highway Civil Contractor</div>
+            <div class="persona-jurisdiction">ðŸ—ï¸ Dual-Confirm: Mumbai Coastal &amp; Marine</div>
+            <div class="persona-login-action">Tap to Select</div>
+          </div>
+
+          <!-- Account 6: rohan.owner -->
+          <div class="persona-card" data-type="Owner" onclick="quickLogin('rohan.owner')">
+            <div class="persona-card-top">
+              <div class="persona-avatar">ðŸ›ï¸</div>
+              <div class="persona-info">
+                <div class="persona-name">Rohan Joshi</div>
+                <div class="persona-username">rohan.owner</div>
+              </div>
+            </div>
+            <span class="persona-tag tag-owner">Site Owner</span>
+            <div class="persona-role-title">Site Owner (Pune Metro Project)</div>
+            <div class="persona-jurisdiction">ðŸ›ï¸ Jurisdiction: Pune Metro Line 3</div>
+            <div class="persona-login-action">Tap to Select</div>
+          </div>
+
+          <!-- Account 7: suresh.owner -->
+          <div class="persona-card" data-type="Owner" onclick="quickLogin('suresh.owner')">
+            <div class="persona-card-top">
+              <div class="persona-avatar">âš“</div>
+              <div class="persona-info">
+                <div class="persona-name">Suresh Shinde</div>
+                <div class="persona-username">suresh.owner</div>
+              </div>
+            </div>
+            <span class="persona-tag tag-owner">Site Owner</span>
+            <div class="persona-role-title">Site Owner (Mumbai Coastal Project)</div>
+            <div class="persona-jurisdiction">ðŸ›ï¸ Jurisdiction: Mumbai Coastal Pier 4</div>
+            <div class="persona-login-action">Tap to Select</div>
+          </div>
+
+          <!-- Account 8: public.viewer -->
+          <div class="persona-card" data-type="Viewer" onclick="quickLogin('public.viewer')">
+            <div class="persona-card-top">
+              <div class="persona-avatar">ðŸ‘ï¸</div>
+              <div class="persona-info">
+                <div class="persona-name">Public Auditor</div>
+                <div class="persona-username">public.viewer</div>
+              </div>
+            </div>
+            <span class="persona-tag tag-viewer">Public Auditor</span>
+            <div class="persona-role-title">Read-Only Auditor</div>
+            <div class="persona-jurisdiction">ðŸŒ Public Transparency &amp; ESG Records</div>
+            <div class="persona-login-action">Tap to Select</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePasswordVisibility() {
+      const pwd = document.getElementById("loginPassword");
+      const btn = document.getElementById("togglePwdBtn");
+      if (pwd.type === "password") {
+        pwd.type = "text";
+        btn.textContent = "ðŸ™ˆ";
+      } else {
+        pwd.type = "password";
+        btn.textContent = "ðŸ‘ï¸";
+      }
+    }
+
+    const KNOWN_ACCOUNTS = {
+      "rahul.engineer": {
+        id: "user-1", username: "rahul.engineer", name: "Rahul Sharma", role: "Site Engineer",
+        user_type: "Team/Staff", email: "rahul.engineer@climatebuild.ai", avatar: "ðŸ‘·",
+        assigned_site_id: null, assigned_site_name: "All Project Sites (Operations)"
+      },
+      "pooja.safety": {
+        id: "user-2", username: "pooja.safety", name: "Pooja Deshmukh", role: "Safety Officer",
+        user_type: "Team/Staff", email: "pooja.safety@climatebuild.ai", avatar: "ðŸ¦º",
+        assigned_site_id: null, assigned_site_name: "All Project Sites (Safety Oversight)"
+      },
+      "vikram.pm": {
+        id: "user-3", username: "vikram.pm", name: "Vikram Patil", role: "Project Director",
+        user_type: "Team/Staff", email: "vikram.patil@climatebuild.ai", avatar: "ðŸ“Š",
+        assigned_site_id: null, assigned_site_name: "All Project Sites (Executive Oversight)"
+      },
+      "shiva.admin": {
+        id: "user-4", username: "shiva.admin", name: "Shiva Contractor", role: "Lead Master Contractor",
+        user_type: "Contractor", email: "shiva.contractor@climatebuild.ai", avatar: "ðŸ¢",
+        assigned_site_id: "site-pune", assigned_site_name: "Pune Metro Line 3"
+      },
+      "amit.contractor": {
+        id: "user-5", username: "amit.contractor", name: "Amit Verma", role: "Highway Civil Contractor",
+        user_type: "Contractor", email: "amit.verma@climatebuild.ai", avatar: "ðŸš›",
+        assigned_site_id: "site-mumbai", assigned_site_name: "Mumbai Coastal Road Pier 4"
+      },
+      "rohan.owner": {
+        id: "user-6", username: "rohan.owner", name: "Rohan Joshi", role: "Site Owner (Pune Metro Project)",
+        user_type: "Owner", email: "rohan.joshi@climatebuild.ai", avatar: "ðŸ›ï¸",
+        assigned_site_id: "site-pune", assigned_site_name: "Pune Metro Line 3"
+      },
+      "suresh.owner": {
+        id: "user-7", username: "suresh.owner", name: "Suresh Shinde", role: "Site Owner (Mumbai Coastal Project)",
+        user_type: "Owner", email: "suresh.shinde@climatebuild.ai", avatar: "âš“",
+        assigned_site_id: "site-mumbai", assigned_site_name: "Mumbai Coastal Road Pier 4"
+      },
+      "public.viewer": {
+        id: "user-8", username: "public.viewer", name: "Public Auditor", role: "Read-Only Auditor",
+        user_type: "Viewer", email: "auditor@climatebuild.ai", avatar: "ðŸ‘ï¸",
+        assigned_site_id: null, assigned_site_name: "Public Infrastructure Audit Portal"
+      }
+    };
+
+    // Check if user is already logged in
+    document.addEventListener("DOMContentLoaded", () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem("climatebuild_user"));
+        const token = localStorage.getItem("climatebuild_token");
+        if (saved && saved.name && token) {
+          const errBanner = document.getElementById("loginErrorBanner");
+          errBanner.style.background = "#EFF6FF";
+          errBanner.style.borderColor = "#93C5FD";
+          errBanner.style.color = "#1E40AF";
+          errBanner.style.display = "flex";
+          errBanner.innerHTML = `
+            <span>ðŸ‘¤</span>
+            <div style="flex:1;">
+              Currently logged in as <strong>${saved.name}</strong> (${saved.role}).
+              <a href="index.html" style="margin-left:8px; color:#2563EB; font-weight:700; text-decoration:underline;">Enter Dashboard âž”</a>
+            </div>
+          `;
+        }
+      } catch (e) {}
+    });
+
+    function filterPersonas(type, btn) {
+      document.querySelectorAll(".quick-filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const cards = document.querySelectorAll(".persona-card");
+      cards.forEach(card => {
+        if (type === "all" || card.dataset.type === type) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    async function executeLogin(username, password, isDemo = false) {
+      const errorBanner = document.getElementById("loginErrorBanner");
+      const errorText = document.getElementById("loginErrorText");
+      const submitBtn = document.getElementById("loginSubmitBtn");
+      
+      errorBanner.style.display = "none";
+      errorBanner.style.background = "var(--risk-critical-bg)";
+      errorBanner.style.borderColor = "var(--risk-critical-border)";
+      errorBanner.style.color = "var(--risk-critical)";
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Authenticating...</span>`;
+
+      const normalizedUser = (username || "").trim().toLowerCase();
+      let authUser = null;
+      let token = null;
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: normalizedUser, password, is_demo: isDemo })
+        });
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          authUser = data.user;
+          token = data.token;
+          localStorage.setItem("climatebuild_permissions", JSON.stringify(data.permissions || {}));
+        } else {
+          errorText.textContent = data.error || "Authentication failed. Please verify credentials.";
+          errorBanner.style.display = "flex";
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>Sign In to Console</span><span>âž”</span>`;
+          return;
+        }
+      } catch (err) {
+        // Client-side fallback for offline or file:// protocol
+        console.warn("Backend /api/auth/login unreachable, validating locally:", err);
+        if (KNOWN_ACCOUNTS[normalizedUser]) {
+          if (isDemo || password === "climate123") {
+            authUser = KNOWN_ACCOUNTS[normalizedUser];
+            token = `cb-token-${authUser.id}-${Date.now()}`;
+          } else {
+            errorText.textContent = "Incorrect password. Default demo password is: climate123";
+            errorBanner.style.display = "flex";
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Sign In to Console</span><span>âž”</span>`;
+            return;
+          }
+        } else {
+          errorText.textContent = `User '${username}' not found. Please choose from the 8 demo accounts.`;
+          errorBanner.style.display = "flex";
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>Sign In to Console</span><span>âž”</span>`;
+          return;
+        }
+      }
+
+      if (authUser) {
+        localStorage.setItem("climatebuild_token", token || (`token-${Date.now()}`));
+        localStorage.setItem("climatebuild_user", JSON.stringify(authUser));
+        localStorage.setItem("climatebuild_persona", JSON.stringify({
+          name: authUser.name,
+          role: authUser.role,
+          avatar: authUser.avatar
+        }));
+
+        submitBtn.innerHTML = `<span>âœ“ Welcome ${authUser.name}! Opening Console...</span>`;
+        setTimeout(() => {
+          window.location.replace("index.html");
+        }, 350);
+      }
+    }
+
+    function handleFormLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById("loginUsername").value.trim();
+      const p = document.getElementById("loginPassword").value;
+      executeLogin(u, p, false);
+    }
+
+    function quickLogin(username) {
+      selectAccount(username);
+    }
+
+    function selectAccount(username) {
+      // Fill the login form with this account's credentials
+      document.getElementById("loginUsername").value = username;
+      document.getElementById("loginPassword").value = "climate123";
+
+      // Highlight the selected card, reset all others
+      document.querySelectorAll(".persona-card").forEach(card => {
+        card.classList.remove("selected");
+        const action = card.querySelector(".persona-login-action");
+        if (action) action.textContent = "Tap to Select";
+      });
+      const selectedCard = document.querySelector(`.persona-card[onclick*="${username}"]`);
+      if (selectedCard) {
+        selectedCard.classList.add("selected");
+        const action = selectedCard.querySelector(".persona-login-action");
+        if (action) action.textContent = "âœ“ Selected â€” click Sign In âž”";
+        selectedCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      // Show a notice in the form
+      const notice = document.getElementById("selectedAccountNotice");
+      const knownUser = KNOWN_ACCOUNTS[username];
+      if (notice && knownUser) {
+        notice.style.display = "flex";
+        notice.innerHTML = `<span style="color:var(--primary)">âœ“ Account selected: <strong>${knownUser.name}</strong> â€” ${knownUser.role}</span>`;
+      }
+    }
+  </script>
+</body>
+</html>
+
